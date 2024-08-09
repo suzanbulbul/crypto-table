@@ -1,7 +1,7 @@
-import React from "react";
+import React, { useState } from "react";
 
 //Components
-import Table from "../components/Table.tsx";
+import { Table } from "../components";
 
 const cryptoData = [
   {
@@ -31,6 +31,8 @@ const cryptoData = [
 ];
 
 const Home = () => {
+  const [page, setPage] = useState<number>(0);
+
   const columns = [
     {
       title: "Crypto",
@@ -87,7 +89,23 @@ const Home = () => {
 
   return (
     <div className="container mx-auto">
-      <Table data={cryptoData} columns={columns} />
+      <Table
+        data={cryptoData}
+        columns={columns}
+        pagination={{
+          currentPage: page + 1,
+          totalPage: 10,
+          onNextPage: async () => {
+            setPage(page + 1);
+          },
+          onPrevPage: async () => {
+            setPage(page - 1);
+          },
+          setPage: () => {
+            return;
+          },
+        }}
+      />
     </div>
   );
 };

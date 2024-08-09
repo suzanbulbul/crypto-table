@@ -1,19 +1,12 @@
-import React from "react";
+import React, { Dispatch, SetStateAction, useState } from "react";
 import cn from "classnames";
 
 //Components
-import WhiteBox from "./WhiteBox.tsx";
+import { Pagination } from "./Pagination";
+import { WhiteBox } from "../";
 
-interface TablePrpos {
-  data: any[];
-  columns: {
-    title: any;
-    cell: any;
-    className?: string;
-    width?: number;
-  }[];
-  className?: string;
-}
+//Type
+import { TableProps } from "./table.type";
 
 const WIDTHS_CN: { [key: string]: string } = {
   small: "w-1/4",
@@ -22,7 +15,9 @@ const WIDTHS_CN: { [key: string]: string } = {
   full: "w-full",
 };
 
-const Table = ({ data, columns, className }: TablePrpos) => {
+const Table = ({ data, columns, className, pagination }: TableProps) => {
+  const [page, setPage] = useState(pagination?.currentPage);
+
   return (
     <WhiteBox className={cn("relative", className)}>
       <table className="w-full">
@@ -62,6 +57,15 @@ const Table = ({ data, columns, className }: TablePrpos) => {
           ))}
         </tbody>
       </table>
+      {pagination && pagination.totalPage > 1 && (
+        <Pagination
+          currentPage={pagination.currentPage as number}
+          setPage={setPage as Dispatch<SetStateAction<number>>}
+          onNextPage={pagination?.onNextPage as (page: number) => Promise<any>}
+          onPrevPage={pagination?.onPrevPage as (page: number) => Promise<any>}
+          totalPage={pagination?.totalPage as number}
+        />
+      )}
     </WhiteBox>
   );
 };
