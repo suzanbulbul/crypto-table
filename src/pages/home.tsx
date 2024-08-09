@@ -3,12 +3,17 @@ import React, { useState } from "react";
 //Components
 import { Table } from "../components";
 
+//Helper
+import { ICONURL } from "../util/helper/icon-url";
+
+//Enum
+import { ICON_CODE } from "../util/enum/crypto-icon";
+
 const cryptoData = [
   {
     id: "bitcoin",
     symbol: "BTC",
     name: "Bitcoin",
-    image: "https://assets.coingecko.com/coins/images/1/large/bitcoin.png",
     current_price: 26000.0,
     total_volume: 50000000000,
     market_cap_change_percentage_24h: 2.5,
@@ -20,7 +25,17 @@ const cryptoData = [
     id: "ethereum",
     symbol: "ETH",
     name: "Ethereum",
-    image: "https://assets.coingecko.com/coins/images/279/large/ethereum.png",
+    current_price: 1600.0,
+    total_volume: 20000000000,
+    market_cap_change_percentage_24h: -1.2,
+    price_change_percentage_1h_in_currency: -0.3,
+    price_change_percentage_24h_in_currency: -1.0,
+    price_change_percentage_7d_in_currency: 5.0,
+  },
+  {
+    id: "ethereum",
+    symbol: "TRX",
+    name: "TRX",
     current_price: 1600.0,
     total_volume: 20000000000,
     market_cap_change_percentage_24h: -1.2,
@@ -38,11 +53,18 @@ const Home = () => {
       title: "Crypto",
       cell: (item: any) => (
         <div className="flex items-center items-left gap-2">
-          <img className="w-7 h-7" src={item.image} alt={item.name} />
+          <img
+            className="w-7 h-7 rounded-full"
+            src={ICONURL.replace(
+              "${id}",
+              ICON_CODE[item.symbol as keyof typeof ICON_CODE]
+            )}
+            alt={item.name}
+          />
 
           <div className="flex flex-col">
             <div className="flex justify-between items-center gap-2 text-indigo-900">
-              {item.symbol}
+              {ICON_CODE[item.symbol as keyof typeof ICON_CODE]}
               <span className="text-sm text-gray-500 fomt-bold">
                 / {item.symbol}
               </span>
