@@ -1,4 +1,4 @@
 import WhiteBox from "./WhiteBox";
-import Table from "./Table";
+import Table from "./Table/Table";
 
 export { WhiteBox, Table };

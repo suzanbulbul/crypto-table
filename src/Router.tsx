@@ -2,7 +2,7 @@ import React from "react";
 import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
 
 //Pages
-import Home from "./pages/home.tsx";
+import Home from "./pages/home";
 
 const AppRoutes = () => {
   return (
