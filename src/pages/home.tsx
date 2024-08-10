@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import classNames from "classnames";
 
 //Components
@@ -18,8 +18,16 @@ import { DownArrow, UpArrow } from "../util/icons";
 
 const Home = () => {
   const [page, setPage] = useState<number>(0);
+  const [paginatedData, setPaginatedData] = useState<CoinData[]>([]);
+  const itemsPerPage = 10;
 
   const { data: coinData, sparklineData } = useWebSocket(CRYPTO_URL.coin);
+
+  useEffect(() => {
+    setPaginatedData(
+      coinData.slice(page * itemsPerPage, (page + 1) * itemsPerPage)
+    );
+  }, [coinData, page]);
 
   const columns = [
     {
@@ -155,23 +163,27 @@ const Home = () => {
 
   return (
     <div className="container mx-auto">
-      <Table
-        data={coinData}
-        columns={columns}
-        pagination={{
-          currentPage: page + 1,
-          totalPage: 10,
-          onNextPage: async () => {
-            setPage(page + 1);
-          },
-          onPrevPage: async () => {
-            setPage(page - 1);
-          },
-          setPage: () => {
-            return;
-          },
-        }}
-      />
+      {paginatedData.length > 0 ? (
+        <Table
+          data={paginatedData}
+          columns={columns}
+          pagination={{
+            currentPage: page + 1,
+            totalPage: Math.ceil(coinData.length / itemsPerPage),
+            onNextPage: async () => {
+              setPage(page + 1);
+            },
+            onPrevPage: async () => {
+              setPage(page - 1);
+            },
+            setPage: () => {
+              return;
+            },
+          }}
+        />
+      ) : (
+        "Loading..."
+      )}
     </div>
   );
 };

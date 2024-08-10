@@ -1,8 +1,11 @@
 import { useState, useEffect } from "react";
 import { useQueryClient } from "@tanstack/react-query";
 
-//Type
+// Type
 import { CoinData } from "../type/coin";
+
+// Constants
+import { COINS } from "../constants/coins";
 
 const useWebSocket = (url: string) => {
   const queryClient = useQueryClient();
@@ -48,15 +51,24 @@ const useWebSocket = (url: string) => {
       });
 
       setData((prevData) => {
-        const index = prevData.findIndex(
+        const updatedData = [...prevData];
+        const index = updatedData.findIndex(
           (item) => item.symbol === formattedData.symbol
         );
+
         if (index !== -1) {
-          const updatedData = [...prevData];
           updatedData[index] = formattedData;
-          return updatedData;
+        } else {
+          updatedData.push(formattedData);
         }
-        return [...prevData, formattedData];
+
+        const sortedData = COINS.map((coin) =>
+          updatedData.find(
+            (data) => data.symbol === `${coin.code.toUpperCase()}USDT`
+          )
+        ).filter((data) => data !== undefined) as CoinData[];
+
+        return sortedData;
       });
     };
 
