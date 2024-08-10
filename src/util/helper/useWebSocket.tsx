@@ -25,10 +25,8 @@ const useWebSocket = (url: string) => {
       const formattedData: CoinData = {
         symbol: data.s,
         lastPrice: data.c,
-        priceChange: data.p,
         priceChangePercent: data.P,
-        highPrice: data.h,
-        lowPrice: data.l,
+        marketvalue: data.v,
       };
 
       queryClient.setQueryData(

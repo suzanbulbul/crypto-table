@@ -98,7 +98,7 @@ const Home = () => {
     {
       title: "Market Value",
       cell: (item: CoinData) => {
-        const value = parseFloat(item.lastPrice) * 1000000;
+        const value = item.marketvalue;
 
         let formattedValue;
         if (value >= 1e9) {
