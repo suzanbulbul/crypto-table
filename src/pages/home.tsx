@@ -4,73 +4,40 @@ import React, { useState } from "react";
 import { Table } from "../components";
 
 //Helper
-import { ICONURL } from "../util/helper/icon-url";
+import { CRYPTO_URL, useWebSocket } from "../util/helper";
 
 //Enum
-import { ICON_CODE } from "../util/enum/crypto-icon";
+import { COIN_SHORTCODE, COIN_NAME } from "../util/enum/crypto";
 
-const cryptoData = [
-  {
-    id: "bitcoin",
-    symbol: "BTC",
-    name: "Bitcoin",
-    current_price: 26000.0,
-    total_volume: 50000000000,
-    market_cap_change_percentage_24h: 2.5,
-    price_change_percentage_1h_in_currency: 0.5,
-    price_change_percentage_24h_in_currency: 2.0,
-    price_change_percentage_7d_in_currency: -1.5,
-  },
-  {
-    id: "ethereum",
-    symbol: "ETH",
-    name: "Ethereum",
-    current_price: 1600.0,
-    total_volume: 20000000000,
-    market_cap_change_percentage_24h: -1.2,
-    price_change_percentage_1h_in_currency: -0.3,
-    price_change_percentage_24h_in_currency: -1.0,
-    price_change_percentage_7d_in_currency: 5.0,
-  },
-  {
-    id: "ethereum",
-    symbol: "TRX",
-    name: "TRX",
-    current_price: 1600.0,
-    total_volume: 20000000000,
-    market_cap_change_percentage_24h: -1.2,
-    price_change_percentage_1h_in_currency: -0.3,
-    price_change_percentage_24h_in_currency: -1.0,
-    price_change_percentage_7d_in_currency: 5.0,
-  },
-];
+//Type
+import { CoinData } from "../util/type/coin";
 
 const Home = () => {
   const [page, setPage] = useState<number>(0);
 
+  const { data: coinData, sparklineData } = useWebSocket(CRYPTO_URL.coin);
+  
+
   const columns = [
     {
-      title: "Crypto",
-      cell: (item: any) => (
-        <div className="flex items-center items-left gap-2">
+      title: "Name",
+      cell: (item: CoinData) => (
+        <div className="flex items-center gap-2">
           <img
             className="w-7 h-7 rounded-full"
-            src={ICONURL.replace(
-              "${id}",
-              ICON_CODE[item.symbol as keyof typeof ICON_CODE]
+            src={CRYPTO_URL.icon.replace(
+              "${symbol}",
+              COIN_SHORTCODE[item.symbol as keyof typeof COIN_SHORTCODE]
             )}
-            alt={item.name}
+            alt={COIN_NAME[item.symbol as keyof typeof COIN_NAME]}
           />
-
           <div className="flex flex-col">
             <div className="flex justify-between items-center gap-2 text-indigo-900">
-              {ICON_CODE[item.symbol as keyof typeof ICON_CODE]}
-              <span className="text-sm text-gray-500 fomt-bold">
-                / {item.symbol}
-              </span>
+              {COIN_SHORTCODE[item.symbol as keyof typeof COIN_SHORTCODE]}
+              <span className="text-sm text-gray-500 font-bold">/ USDT</span>
             </div>
-            <span className="text-normal text-gray-500 fomt-semibold">
-              {item.name}
+            <span className="text-normal text-gray-500 font-semibold">
+              {COIN_NAME[item.symbol as keyof typeof COIN_NAME]}
             </span>
           </div>
         </div>
@@ -79,32 +46,35 @@ const Home = () => {
     },
     {
       title: "Price",
-      cell: (item: any) => `$${item.current_price.toFixed(2)}`,
+      cell: (item: CoinData) => `$${parseFloat(item.lastPrice).toFixed(2)}`,
       className: "text-right",
     },
     {
-      title: "Market Volume",
-      cell: (item: any) => item.total_volume.toLocaleString(),
+      title: "Market Cap",
+      cell: (item: CoinData) => `$${parseFloat(item.lastPrice) * 1000000}`,
       className: "text-right",
     },
     {
       title: "24H Change",
-      cell: (item: any) => (
+      cell: (item: CoinData) => (
         <span
           className={
-            item.price_change_percentage_24h_in_currency > 0
+            parseFloat(item.priceChangePercent) > 0
               ? "text-green-500"
               : "text-red-500"
           }
         >
-          {item.price_change_percentage_24h_in_currency.toFixed(2)}%
+          {parseFloat(item.priceChange).toFixed(2)} (
+          {parseFloat(item.priceChangePercent).toFixed(2)}%)
         </span>
       ),
       className: "text-right",
     },
     {
-      title: "",
-      cell: (item: any) => "grafik",
+      title: "Sparkline",
+      cell: (item: CoinData) => {
+        return <div className="sparkline">Grafik</div>;
+      },
       className: "text-right",
     },
   ];
@@ -112,7 +82,7 @@ const Home = () => {
   return (
     <div className="container mx-auto">
       <Table
-        data={cryptoData}
+        data={coinData}
         columns={columns}
         pagination={{
           currentPage: page + 1,
