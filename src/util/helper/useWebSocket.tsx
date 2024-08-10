@@ -10,9 +10,6 @@ import { COINS } from "../constants/coins";
 const useWebSocket = (url: string) => {
   const queryClient = useQueryClient();
   const [data, setData] = useState<CoinData[]>([]);
-  const [sparklineData, setSparklineData] = useState<Record<string, number[]>>(
-    {}
-  );
 
   useEffect(() => {
     const socket = new WebSocket(url);
@@ -38,17 +35,6 @@ const useWebSocket = (url: string) => {
         ["queryData", formattedData.symbol],
         formattedData
       );
-
-      setSparklineData((prev) => {
-        const newSparklineData = {
-          ...prev,
-          [formattedData.symbol]: [
-            ...(prev[formattedData.symbol] || []),
-            parseFloat(formattedData.lastPrice),
-          ].slice(-24),
-        };
-        return newSparklineData;
-      });
 
       setData((prevData) => {
         const updatedData = [...prevData];
@@ -85,7 +71,7 @@ const useWebSocket = (url: string) => {
     };
   }, [url, queryClient]);
 
-  return { data, sparklineData };
+  return { data };
 };
 
 export default useWebSocket;
