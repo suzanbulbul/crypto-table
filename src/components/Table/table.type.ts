@@ -17,6 +17,7 @@ export interface TableProps {
     onPrevPage: (page: number) => Promise<any>;
     setPage: Dispatch<SetStateAction<number>>;
   };
+  loading?: boolean
 }
 
 export type PaginationProps = {

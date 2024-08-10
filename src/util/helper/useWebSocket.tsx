@@ -10,12 +10,14 @@ import { COINS } from "../constants/coins";
 const useWebSocket = (url: string) => {
   const queryClient = useQueryClient();
   const [data, setData] = useState<CoinData[]>([]);
+  const [loading, setLoading] = useState<boolean>(true);
 
   useEffect(() => {
     const socket = new WebSocket(url);
 
     socket.onopen = () => {
       console.log("WebSocket connection opened");
+      setLoading(true);
     };
 
     socket.onmessage = (event) => {
@@ -54,14 +56,18 @@ const useWebSocket = (url: string) => {
 
         return sortedData;
       });
+
+      setLoading(false);
     };
 
     socket.onerror = (error) => {
       console.error("WebSocket error:", error);
+      setLoading(false);
     };
 
     socket.onclose = (event) => {
       console.log("WebSocket connection closed", event.reason);
+      setLoading(false);
     };
 
     return () => {
@@ -69,7 +75,7 @@ const useWebSocket = (url: string) => {
     };
   }, [url, queryClient]);
 
-  return { data };
+  return { data, loading };
 };
 
 export default useWebSocket;

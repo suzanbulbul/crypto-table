@@ -21,7 +21,7 @@ const Home = () => {
   const [paginatedData, setPaginatedData] = useState<CoinData[]>([]);
   const itemsPerPage = 10;
 
-  const { data: coinData } = useWebSocket(CRYPTO_URL.coin);
+  const { data: coinData, loading } = useWebSocket(CRYPTO_URL.coin);
 
   useEffect(() => {
     setPaginatedData(
@@ -176,27 +176,24 @@ const Home = () => {
 
   return (
     <div className="container mx-auto">
-      {paginatedData.length > 0 ? (
-        <Table
-          data={paginatedData}
-          columns={columns}
-          pagination={{
-            currentPage: page + 1,
-            totalPage: Math.ceil(coinData.length / itemsPerPage),
-            onNextPage: async () => {
-              setPage(page + 1);
-            },
-            onPrevPage: async () => {
-              setPage(page - 1);
-            },
-            setPage: () => {
-              return;
-            },
-          }}
-        />
-      ) : (
-        "Loading..."
-      )}
+      <Table
+        data={paginatedData}
+        columns={columns}
+        pagination={{
+          currentPage: page + 1,
+          totalPage: Math.ceil(coinData.length / itemsPerPage),
+          onNextPage: async () => {
+            setPage(page + 1);
+          },
+          onPrevPage: async () => {
+            setPage(page - 1);
+          },
+          setPage: () => {
+            return;
+          },
+        }}
+        loading={loading}
+      />
     </div>
   );
 };
