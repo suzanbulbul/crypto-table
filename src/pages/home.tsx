@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import classNames from "classnames";
 
 //Components
 import { Table } from "../components";
@@ -12,64 +13,135 @@ import { COIN_SHORTCODE, COIN_NAME } from "../util/enum/crypto";
 //Type
 import { CoinData } from "../util/type/coin";
 
+//Icons
+import { DownArrow, UpArrow } from "../util/icons";
+
 const Home = () => {
   const [page, setPage] = useState<number>(0);
 
   const { data: coinData, sparklineData } = useWebSocket(CRYPTO_URL.coin);
-  
 
   const columns = [
     {
-      title: "Name",
+      title: "Crypto",
       cell: (item: CoinData) => (
-        <div className="flex items-center gap-2">
+        <article className="flex items-center gap-2">
           <img
-            className="w-7 h-7 rounded-full"
+            className="w-8 h-8 rounded-full"
             src={CRYPTO_URL.icon.replace(
               "${symbol}",
               COIN_SHORTCODE[item.symbol as keyof typeof COIN_SHORTCODE]
             )}
             alt={COIN_NAME[item.symbol as keyof typeof COIN_NAME]}
           />
-          <div className="flex flex-col">
-            <div className="flex justify-between items-center gap-2 text-indigo-900">
-              {COIN_SHORTCODE[item.symbol as keyof typeof COIN_SHORTCODE]}
-              <span className="text-sm text-gray-500 font-bold">/ USDT</span>
+          <div className="flex flex-col gap-0.5">
+            <div className="flex flex-row gap-1 items-baseline">
+              <span className="xs:text-sm sm:text-base font-semibold text-indigo-900">
+                {COIN_SHORTCODE[item.symbol as keyof typeof COIN_SHORTCODE]}
+              </span>
+              <span className="xs:text-sm sm:text-base font-regular text-neutral-700 font-light">
+                / USDT
+              </span>
             </div>
-            <span className="text-normal text-gray-500 font-semibold">
+            <p className="xs:text-sm sm:text-base font-regular text-neutral-800 font-light">
               {COIN_NAME[item.symbol as keyof typeof COIN_NAME]}
-            </span>
+            </p>
           </div>
-        </div>
+        </article>
       ),
       width: "large",
     },
     {
       title: "Price",
-      cell: (item: CoinData) => `$${parseFloat(item.lastPrice).toFixed(2)}`,
-      className: "text-right",
-    },
-    {
-      title: "Market Cap",
-      cell: (item: CoinData) =>
-        `$${(parseFloat(item.lastPrice) * 1000000).toFixed(2)}`,
-      className: "text-right",
-    },
-    {
-      title: "24H Change",
-      cell: (item: CoinData) => (
-        <span
-          className={
-            parseFloat(item.priceChangePercent) > 0
-              ? "text-green-500"
-              : "text-red-500"
+      cell: (item: CoinData) => {
+        const value = parseFloat(item.lastPrice);
+
+        const formatValue = (val: number) => {
+          if (val < 0.01 && val > 0) {
+            return val.toFixed(7);
           }
-        >
-          {parseFloat(item.priceChange).toFixed(2)} (
-          {parseFloat(item.priceChangePercent).toFixed(2)}%)
-        </span>
-      ),
+
+          if (val >= 1000) {
+            return val.toLocaleString("en-US", {
+              minimumFractionDigits: 2,
+              maximumFractionDigits: 2,
+            });
+          }
+
+          return val.toLocaleString("en-US", {
+            minimumFractionDigits: 4,
+            maximumFractionDigits: 4,
+          });
+        };
+
+        return (
+          <div className="flex flex-row justify-end items-center gap-1">
+            <span className="text-indigo-900 xs:text-sm sm:text-base font-medium">
+              {formatValue(value)}{" "}
+            </span>
+            <span className="xs:text-sm font-regular text-xs font-light text-neutral-700 ">
+              USDT
+            </span>
+          </div>
+        );
+      },
       className: "text-right",
+    },
+    {
+      title: "Market Value",
+      cell: (item: CoinData) => {
+        const value = parseFloat(item.lastPrice) * 1000000;
+
+        let formattedValue;
+        if (value >= 1e9) {
+          formattedValue = `${(value / 1e9).toFixed(2)}B`;
+        } else if (value >= 1e6) {
+          formattedValue = `${(value / 1e6).toFixed(2)}M`;
+        } else if (value >= 1e3) {
+          formattedValue = `${(value / 1e3).toFixed(2)}K`;
+        } else {
+          formattedValue = `${value.toFixed(2)}`;
+        }
+
+        return (
+          <div className="flex flex-row justify-end items-center gap-1">
+            <span className="text-indigo-900 xs:text-sm sm:text-base font-medium">
+              {formattedValue}
+            </span>
+            <span className="xs:text-sm font-regular text-xs font-light text-neutral-700">
+              USDT
+            </span>
+          </div>
+        );
+      },
+      className: "text-right",
+      smHidden: true,
+    },
+    {
+      title: "24h Change	",
+      cell: (item: CoinData) => {
+        const isPositive = parseFloat(item.priceChangePercent) > 0;
+
+        return (
+          <div className="flex flex-row justify-end items-center gap-1">
+            {isPositive ? (
+              <UpArrow className="w-4 h-4 text-green-600" />
+            ) : (
+              <DownArrow className="w-4 h-4 text-red-600" />
+            )}
+            <span
+              className={classNames(
+                "xs:text-sm sm:text-base font-light",
+                isPositive ? "text-green-600" : "text-red-600"
+              )}
+            >
+              {Math.abs(parseFloat(item.priceChangePercent)).toFixed(2)}%
+            </span>
+          </div>
+        );
+      },
+      className: "text-right",
+      smHidden: true,
     },
     {
       title: "Sparkline",
@@ -77,6 +149,7 @@ const Home = () => {
         return <div className="sparkline">Grafik</div>;
       },
       className: "text-right",
+      smHidden: true,
     },
   ];
 

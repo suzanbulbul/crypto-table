@@ -7,6 +7,7 @@ export interface TableProps {
     cell: any;
     className?: string;
     width?: string;
+    smHidden?: boolean;
   }[];
   className?: string;
   pagination?: {

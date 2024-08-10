@@ -1,3 +1,6 @@
+//Fonts
+@import url('https://fonts.googleapis.com/css2?family=Archivo:wght@400;500;600;700&display=swap');
+
 //Tailwind
 @tailwind base;
 @tailwind components;
@@ -15,7 +18,7 @@ body, html {
     padding: 0;
 }
 body{
-    font-family: 'Inter', sans-serif;
+    font-family: 'Archivo','Inter', sans-serif;
 }
 a{
     text-decoration: none;

@@ -30,7 +30,8 @@ const Table = ({ data, columns, className, pagination }: TableProps) => {
                 className={cn(
                   "px-4 py-3 text-left font-light text-xs text-gray-400 min-w-28",
                   column.className,
-                  column.width ? WIDTHS_CN[column.width] : ""
+                  column.width ? WIDTHS_CN[column.width] : "",
+                  column.smHidden && "hidden md:table-cell"
                 )}
               >
                 {column.title}
@@ -45,9 +46,10 @@ const Table = ({ data, columns, className, pagination }: TableProps) => {
                 <td
                   key={index}
                   className={cn(
-                    "px-4 py-3 text-left text-sm min-w-28 h-6",
+                    "px-4 py-3 text-left text-sm",
                     column.className,
-                    column.width ? WIDTHS_CN[column.width] : ""
+                    column.width ? WIDTHS_CN[column.width] : "",
+                    column.smHidden && "hidden md:table-cell"
                   )}
                 >
                   {column.cell(item)}
