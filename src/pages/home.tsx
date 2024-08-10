@@ -126,24 +126,33 @@ const Home = () => {
       smHidden: true,
     },
     {
-      title: "24h Change	",
+      title: "24h Change",
       cell: (item: CoinData) => {
         const isPositive = parseFloat(item.priceChangePercent) > 0;
 
         return (
           <div className="flex flex-row justify-end items-center gap-1">
-            {isPositive ? (
-              <UpArrow className="w-4 h-4 text-green-600" />
-            ) : (
-              <DownArrow className="w-4 h-4 text-red-600" />
-            )}
+            {Number(item.priceChangePercent) !== 0 ? (
+              isPositive ? (
+                <UpArrow className="w-4 h-4 text-green-600" />
+              ) : (
+                <DownArrow className="w-4 h-4 text-red-600" />
+              )
+            ) : null}
             <span
               className={classNames(
                 "xs:text-sm sm:text-base font-light",
-                isPositive ? "text-green-600" : "text-red-600"
+                Number(item.priceChangePercent) === 0
+                  ? "text-neutral-700"
+                  : isPositive
+                  ? "text-green-600"
+                  : "text-red-600"
               )}
             >
-              {Math.abs(parseFloat(item.priceChangePercent)).toFixed(2)}%
+              {Number(item.priceChangePercent) === 0
+                ? 0
+                : Math.abs(parseFloat(item.priceChangePercent)).toFixed(2)}
+              %
             </span>
           </div>
         );
