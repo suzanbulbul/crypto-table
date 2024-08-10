@@ -21,7 +21,7 @@ const Home = () => {
   const [paginatedData, setPaginatedData] = useState<CoinData[]>([]);
   const itemsPerPage = 10;
 
-  const { data: coinData } = useWebSocket(CRYPTO_URL.coin);
+  const { data: coinData, loading } = useWebSocket(CRYPTO_URL.coin);
 
   useEffect(() => {
     setPaginatedData(
@@ -98,7 +98,7 @@ const Home = () => {
     {
       title: "Market Value",
       cell: (item: CoinData) => {
-        const value = parseFloat(item.lastPrice) * 1000000;
+        const value = item.marketvalue;
 
         let formattedValue;
         if (value >= 1e9) {
@@ -126,24 +126,33 @@ const Home = () => {
       smHidden: true,
     },
     {
-      title: "24h Change	",
+      title: "24h Change",
       cell: (item: CoinData) => {
         const isPositive = parseFloat(item.priceChangePercent) > 0;
 
         return (
           <div className="flex flex-row justify-end items-center gap-1">
-            {isPositive ? (
-              <UpArrow className="w-4 h-4 text-green-600" />
-            ) : (
-              <DownArrow className="w-4 h-4 text-red-600" />
-            )}
+            {Number(item.priceChangePercent) !== 0 ? (
+              isPositive ? (
+                <UpArrow className="w-4 h-4 text-green-600" />
+              ) : (
+                <DownArrow className="w-4 h-4 text-red-600" />
+              )
+            ) : null}
             <span
               className={classNames(
                 "xs:text-sm sm:text-base font-light",
-                isPositive ? "text-green-600" : "text-red-600"
+                Number(item.priceChangePercent) === 0
+                  ? "text-neutral-700"
+                  : isPositive
+                  ? "text-green-600"
+                  : "text-red-600"
               )}
             >
-              {Math.abs(parseFloat(item.priceChangePercent)).toFixed(2)}%
+              {Number(item.priceChangePercent) === 0
+                ? 0
+                : Math.abs(parseFloat(item.priceChangePercent)).toFixed(2)}
+              %
             </span>
           </div>
         );
@@ -167,27 +176,24 @@ const Home = () => {
 
   return (
     <div className="container mx-auto">
-      {paginatedData.length > 0 ? (
-        <Table
-          data={paginatedData}
-          columns={columns}
-          pagination={{
-            currentPage: page + 1,
-            totalPage: Math.ceil(coinData.length / itemsPerPage),
-            onNextPage: async () => {
-              setPage(page + 1);
-            },
-            onPrevPage: async () => {
-              setPage(page - 1);
-            },
-            setPage: () => {
-              return;
-            },
-          }}
-        />
-      ) : (
-        "Loading..."
-      )}
+      <Table
+        data={paginatedData}
+        columns={columns}
+        pagination={{
+          currentPage: page + 1,
+          totalPage: Math.ceil(coinData.length / itemsPerPage),
+          onNextPage: async () => {
+            setPage(page + 1);
+          },
+          onPrevPage: async () => {
+            setPage(page - 1);
+          },
+          setPage: () => {
+            return;
+          },
+        }}
+        loading={loading}
+      />
     </div>
   );
 };
