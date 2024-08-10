@@ -38,7 +38,7 @@ export enum COIN_NAME {
   CHZUSDT = "Chiliz",
   AXSUSDT = "Axie Infinity",
   GALAUSDT = "Gala",
-  USDYUSDT = "USDY",
+  USDYUSDT = "Ondo US Dollar Yield",
   FLOKIUSDT = "Floki Inu",
   PEPEUSDT = "Pepe Coin",
   UNIUSDT = "Uniswap",
