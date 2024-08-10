@@ -40,7 +40,7 @@ const Table = ({ data, columns, className, pagination }: TableProps) => {
         </thead>
         <tbody>
           {data.map((item: any, index) => (
-            <tr key={item.id} className="bg-white ">
+            <tr key={index} className="bg-white ">
               {columns.map((column, index) => (
                 <td
                   key={index}
