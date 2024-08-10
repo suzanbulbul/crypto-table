@@ -1,18 +1,22 @@
 import { useState, useEffect } from "react";
+import { useQueryClient } from "@tanstack/react-query";
 
 //Type
 import { CoinData } from "../type/coin";
-import { useQueryClient } from "@tanstack/react-query";
 
 const useWebSocket = (url: string) => {
   const queryClient = useQueryClient();
   const [data, setData] = useState<CoinData[]>([]);
-  const [sparklineData, setSparklineData] = useState<number[]>([]);
+  const [sparklineData, setSparklineData] = useState<Record<string, number[]>>(
+    {}
+  );
 
   useEffect(() => {
     const socket = new WebSocket(url);
 
-    socket.onopen = () => {};
+    socket.onopen = () => {
+      console.log("WebSocket connection opened");
+    };
 
     socket.onmessage = (event) => {
       const message = JSON.parse(event.data);
@@ -32,14 +36,16 @@ const useWebSocket = (url: string) => {
         formattedData
       );
 
-      const newSparklineData = [
-        ...sparklineData,
-        parseFloat(formattedData.lastPrice),
-      ];
-      if (newSparklineData.length > 24) {
-        newSparklineData.shift();
-      }
-      setSparklineData(newSparklineData);
+      setSparklineData((prev) => {
+        const newSparklineData = {
+          ...prev,
+          [formattedData.symbol]: [
+            ...(prev[formattedData.symbol] || []),
+            parseFloat(formattedData.lastPrice),
+          ].slice(-24),
+        };
+        return newSparklineData;
+      });
 
       setData((prevData) => {
         const index = prevData.findIndex(
@@ -58,14 +64,14 @@ const useWebSocket = (url: string) => {
       console.error("WebSocket error:", error);
     };
 
-    socket.onclose = (event) => {};
+    socket.onclose = (event) => {
+      console.log("WebSocket connection closed", event.reason);
+    };
 
     return () => {
-      if (socket) {
-        socket.close();
-      }
+      socket.close();
     };
-  }, [url, sparklineData, queryClient]);
+  }, [url, queryClient]);
 
   return { data, sparklineData };
 };

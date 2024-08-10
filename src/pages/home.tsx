@@ -51,7 +51,8 @@ const Home = () => {
     },
     {
       title: "Market Cap",
-      cell: (item: CoinData) => `$${parseFloat(item.lastPrice) * 1000000}`,
+      cell: (item: CoinData) =>
+        `$${(parseFloat(item.lastPrice) * 1000000).toFixed(2)}`,
       className: "text-right",
     },
     {
