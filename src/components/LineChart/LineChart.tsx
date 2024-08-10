@@ -1,23 +1,33 @@
-import { useState, useEffect } from "react";
 import ApexCharts from "react-apexcharts";
+import { useQuery } from "@tanstack/react-query";
 import { getHistoricalData } from "../../api/HistoricalData";
 
-interface KlineData {
+interface HistoricalDataProps {
   x: number;
   y: number;
 }
 
-const LineChart = ({ symbol }: { symbol: string }) => {
-  const [data, setData] = useState<KlineData[]>([]);
-
-  useEffect(() => {
-    const fetchData = async () => {
-      const historicalData = await getHistoricalData(symbol);
-      setData(historicalData);
-    };
-
-    fetchData();
-  }, [symbol]);
+const LineChart = ({
+  symbol,
+  height = 32,
+  width = 64,
+}: {
+  symbol: string;
+  height?: number;
+  width?: number;
+}) => {
+  const { data } = useQuery<HistoricalDataProps[]>({
+    queryKey: ["historical-data", symbol],
+    queryFn: async () => {
+      try {
+        const response = await getHistoricalData(symbol);
+        return response;
+      } catch (error) {
+        throw new Error("Failed to fetch historical data");
+      }
+    },
+    enabled: !!symbol,
+  });
 
   const options: ApexCharts.ApexOptions = {
     chart: {
@@ -26,7 +36,9 @@ const LineChart = ({ symbol }: { symbol: string }) => {
         enabled: true,
       },
     },
-    colors: [data[0]?.y > data[data.length - 1]?.y ? "#FF4560" : "#00E396"],
+    colors: [
+      data && data[0]?.y > data[data.length - 1]?.y ? "#dc2625" : "#17a34a",
+    ],
     stroke: {
       curve: "smooth",
       width: 2,
@@ -50,12 +62,18 @@ const LineChart = ({ symbol }: { symbol: string }) => {
   const series = [
     {
       name: symbol,
-      data: data,
+      data: data || [],
     },
   ];
 
   return (
-    <ApexCharts options={options} series={series} type="line" height={50} />
+    <ApexCharts
+      options={options}
+      series={series}
+      type="line"
+      height={height}
+      width={width}
+    />
   );
 };
 

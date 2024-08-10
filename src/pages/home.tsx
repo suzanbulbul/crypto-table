@@ -152,9 +152,13 @@ const Home = () => {
       smHidden: true,
     },
     {
-      title: "Sparkline",
+      title: "",
       cell: (item: CoinData) => {
-        return <LineChart symbol={item.symbol} />;
+        return (
+          <div className="flex justify-center">
+            <LineChart symbol={item.symbol} />
+          </div>
+        );
       },
       className: "text-right",
       smHidden: true,
