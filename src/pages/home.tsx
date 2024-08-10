@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import classNames from "classnames";
 
 //Components
-import { Table } from "../components";
+import { Table, LineChart } from "../components";
 
 //Helper
 import { CRYPTO_URL, useWebSocket } from "../util/helper";
@@ -21,7 +21,7 @@ const Home = () => {
   const [paginatedData, setPaginatedData] = useState<CoinData[]>([]);
   const itemsPerPage = 10;
 
-  const { data: coinData, sparklineData } = useWebSocket(CRYPTO_URL.coin);
+  const { data: coinData } = useWebSocket(CRYPTO_URL.coin);
 
   useEffect(() => {
     setPaginatedData(
@@ -154,7 +154,7 @@ const Home = () => {
     {
       title: "Sparkline",
       cell: (item: CoinData) => {
-        return <div className="sparkline">Grafik</div>;
+        return <LineChart symbol={item.symbol} />;
       },
       className: "text-right",
       smHidden: true,
