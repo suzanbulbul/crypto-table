@@ -26,4 +26,5 @@ export const coin = `${
  */
 
 export const icon =
+  // eslint-disable-next-line no-template-curly-in-string, no-useless-concat
   `${process.env.REACT_APP_ICON_URL}/symbol/svg/` + "${symbol}.svg";

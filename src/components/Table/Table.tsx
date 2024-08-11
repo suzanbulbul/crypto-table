@@ -32,6 +32,7 @@ const Table = ({
   pagination,
   loading,
 }: TableProps) => {
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [page, setPage] = useState(pagination?.currentPage);
 
   return (

@@ -51,6 +51,7 @@ const Home = () => {
           <img
             className="w-8 h-8 rounded-full"
             src={CRYPTO_URL.icon.replace(
+              // eslint-disable-next-line no-template-curly-in-string
               "${symbol}",
               COIN_SHORTCODE[item.symbol as keyof typeof COIN_SHORTCODE]
             )}
