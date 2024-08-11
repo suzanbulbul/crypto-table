@@ -1,21 +1,35 @@
 import React, { useEffect, useState } from "react";
 import classNames from "classnames";
 
-//Components
+// Components
 import { Table, LineChart } from "../components";
 
-//Helper
+// Helper
 import { CRYPTO_URL, useWebSocket } from "../util/helper";
 
-//Enum
+// Enum
 import { COIN_SHORTCODE, COIN_NAME } from "../util/enum/crypto";
 
-//Type
+// Type
 import { CoinData } from "../util/type/coin";
 
-//Icons
+// Icons
 import { DownArrow, UpArrow } from "../util/icons";
 
+/**
+ * The `Home` component fetches and displays real-time cryptocurrency data in a paginated table format.
+ *
+ * This component connects to a WebSocket endpoint to retrieve live data for various cryptocurrencies,
+ * formats the data using enums for consistent display, and renders it in a table with pagination controls.
+ * It also includes functionality for showing price trends using line charts and indicators for price changes.
+ *
+ * @remarks
+ * - Uses `useWebSocket` hook to fetch data from the WebSocket URL specified by `CRYPTO_URL.coin`.
+ *   - **Example**: `const { data: coinData, loading } = useWebSocket(CRYPTO_URL.coin);`
+ * - Formats cryptocurrency data using enums `COIN_SHORTCODE` and `COIN_NAME`.
+ *   - **Example**: `COIN_SHORTCODE[item.symbol as keyof typeof COIN_SHORTCODE]`
+ * - Displays data in a paginated table with columns for Crypto, Price, Market Value, 24h Change, and a Line Chart.
+ */
 const Home = () => {
   const [page, setPage] = useState<number>(0);
   const [paginatedData, setPaginatedData] = useState<CoinData[]>([]);

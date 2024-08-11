@@ -1,3 +1,17 @@
+/**
+ * An array of objects representing various cryptocurrencies with their associated IDs and codes.
+ * This constant is used to store the short codes and IDs for different cryptocurrencies.
+ *
+ * @example
+ * // Example data:
+ * // [
+ * //   { id: 1, code: "usdc" },
+ * //   { id: 2, code: "sol" },
+ * //   ...
+ * // ]
+ *
+ * @type {Array<{ id: number; code: string }>}
+ */
 export const COINS = [
   { id: 1, code: "usdc" },
   { id: 2, code: "sol" },

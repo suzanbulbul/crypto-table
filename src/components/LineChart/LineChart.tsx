@@ -2,6 +2,29 @@ import ApexCharts from "react-apexcharts";
 import { useQuery } from "@tanstack/react-query";
 import { getHistoricalData } from "../../api/HistoricalData";
 
+/**
+ * Represents historical data for the line chart.
+ *
+ * @typedef {Object} HistoricalDataProps
+ * @property {number} x - The x-axis value (timestamp).
+ * @property {number} y - The y-axis value (price or value).
+ */
+
+/**
+ * LineChart component renders a sparkline chart for the given cryptocurrency symbol.
+ *
+ * This component uses `react-apexcharts` to render a small line chart displaying the historical
+ * data of a cryptocurrency. The chart adapts its color based on whether the price has increased or
+ * decreased over the period.
+ *
+ * @param {Object} props - The component props.
+ * @param {string} props.symbol - The cryptocurrency symbol to fetch historical data for.
+ * @param {number} [props.height=32] - The height of the chart in pixels. Defaults to 32.
+ * @param {number} [props.width=64] - The width of the chart in pixels. Defaults to 64.
+ *
+ * @returns {JSX.Element} The rendered LineChart component.
+ */
+
 interface HistoricalDataProps {
   x: number;
   y: number;
