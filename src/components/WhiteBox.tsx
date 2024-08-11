@@ -1,14 +1,12 @@
 import React from "react";
 import cn from "classnames";
 
-const WhiteBox = ({
-  children,
-  className,
-  ...rest
-}: {
+export type WhiteBoxProps = {
   children: React.ReactNode;
   className?: string;
-}) => {
+};
+
+const WhiteBox = ({ children, className, ...rest }: WhiteBoxProps) => {
   return (
     <div
       {...rest}

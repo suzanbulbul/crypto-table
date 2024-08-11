@@ -1,10 +1,9 @@
 import React, { Dispatch, SetStateAction, useState } from "react";
 import cn from "classnames";
-import "react-loading-skeleton/dist/skeleton.css";
 import Skeleton from "react-loading-skeleton";
 
 //Components
-import { Pagination } from "./Pagination";
+import Pagination from "./Pagination";
 import { WhiteBox } from "../";
 
 //Type

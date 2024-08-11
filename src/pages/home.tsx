@@ -98,7 +98,7 @@ const Home = () => {
     {
       title: "Market Value",
       cell: (item: CoinData) => {
-        const value = item.marketvalue;
+        const value = Number(item.marketvalue);
 
         let formattedValue;
         if (value >= 1e9) {
