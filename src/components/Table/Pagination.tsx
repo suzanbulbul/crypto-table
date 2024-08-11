@@ -20,13 +20,11 @@ const Pagination = ({
     >
       <div className="hidden sm:block">
         <p className="text-sm font-normal text-gray-500">
-          Page <span data-test-id="table-current-page">{currentPage}</span> of{" "}
-          <span data-test-id="table-total-page-count">{totalPage}</span>
+          Page <span>{currentPage}</span> of <span>{totalPage}</span>
         </p>
       </div>
       <div className="flex flex-1 justify-between sm:justify-end">
         <button
-          data-test-id="table-previous-page"
           onClick={() => {
             onPrevPage(currentPage - 1).then(() => {
               setPage((page) => page - 1);
@@ -50,7 +48,6 @@ const Pagination = ({
         </span>
 
         <button
-          data-test-id="table-next-page"
           onClick={() => {
             onNextPage(currentPage + 1).then(() => {
               setPage((page) => page + 1);
@@ -71,4 +68,4 @@ const Pagination = ({
   );
 };
 
-export { Pagination };
+export default Pagination;
