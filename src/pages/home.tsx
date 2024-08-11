@@ -189,26 +189,24 @@ const Home = () => {
   ];
 
   return (
-    <div className="container mx-auto">
-      <Table
-        data={paginatedData}
-        columns={columns}
-        pagination={{
-          currentPage: page + 1,
-          totalPage: Math.ceil(coinData.length / itemsPerPage),
-          onNextPage: async () => {
-            setPage(page + 1);
-          },
-          onPrevPage: async () => {
-            setPage(page - 1);
-          },
-          setPage: () => {
-            return;
-          },
-        }}
-        loading={loading}
-      />
-    </div>
+    <Table
+      data={paginatedData}
+      columns={columns}
+      pagination={{
+        currentPage: page + 1,
+        totalPage: Math.ceil(coinData.length / itemsPerPage),
+        onNextPage: async () => {
+          setPage(page + 1);
+        },
+        onPrevPage: async () => {
+          setPage(page - 1);
+        },
+        setPage: () => {
+          return;
+        },
+      }}
+      loading={loading}
+    />
   );
 };
 
