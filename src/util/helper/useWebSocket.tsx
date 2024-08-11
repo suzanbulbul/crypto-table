@@ -7,6 +7,26 @@ import { CoinData } from "../type/coin";
 // Constants
 import { COINS } from "../constants/coins";
 
+/**
+ * Custom React hook to manage a WebSocket connection and fetch real-time cryptocurrency data.
+ * This hook establishes a WebSocket connection to the specified URL, processes incoming data,
+ * and maintains the state of the data and loading status.
+ *
+ * @param url - The WebSocket URL to connect to for receiving real-time data.
+ *
+ * @returns An object containing:
+ * - `data`: The current array of cryptocurrency data objects (CoinData[]).
+ * - `loading`: A boolean indicating if data is still being loaded from the WebSocket.
+ *
+ * @example
+ * const { data, loading } = useWebSocket("wss://stream.binance.com:9443/stream?streams=btcusdt@ticker/ethusdt@ticker");
+ *
+ * if (loading) {
+ *   // Show loading indicator
+ * }
+ *
+ * // Use `data` to display or process real-time cryptocurrency information
+ */
 const useWebSocket = (url: string) => {
   const queryClient = useQueryClient();
   const [data, setData] = useState<CoinData[]>([]);

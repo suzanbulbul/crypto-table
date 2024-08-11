@@ -1,0 +1,9 @@
+{
+  "entryPoints": ["src/**/*"],
+  "out": "docs",
+  "includeVersion": true,
+  "exclude": ["**/*.test.tsx", "README.md"],
+  "excludePrivate": true,
+  "excludeProtected": true,
+  "entryPointStrategy": "expand"
+}
