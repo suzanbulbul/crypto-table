@@ -23,7 +23,7 @@ export const getHistoricalData = async (
 ): Promise<Array<{ x: number; y: number }>> => {
   try {
     const response = await axios.get(
-      `https://api.binance.com/api/v3/klines?symbol=${symbol}&interval=1h&limit=24`
+      `${process.env.REACT_APP_HISTORY_URL}/api/v3/klines?symbol=${symbol}&interval=1h&limit=24`
     );
     const data: [number, string, string, string, string, string][] =
       response.data;

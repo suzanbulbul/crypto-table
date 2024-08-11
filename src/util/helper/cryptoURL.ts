@@ -10,9 +10,10 @@ import { COINS } from "../constants/coins";
  * // The resulting URL will be:
  * // "wss://stream.binance.com:9443/stream?streams=btcusdt@ticker/ethusdt@ticker"
  */
-export const coin = `wss://stream.binance.com:9443/stream?streams=${COINS.map(
-  (coin) => `${coin.code}usdt@ticker`
-).join("/")}`;
+
+export const coin = `${
+  process.env.REACT_APP_WEBSOCKET_URL
+}/stream?streams=${COINS.map((coin) => `${coin.code}usdt@ticker`).join("/")}`;
 
 /**
  * URL template for cryptocurrency icons.
@@ -23,4 +24,6 @@ export const coin = `wss://stream.binance.com:9443/stream?streams=${COINS.map(
  * // For a symbol "btc", the resulting URL will be:
  * // "https://cdn.bilira.co/symbol/svg/btc.svg"
  */
-export const icon = "https://cdn.bilira.co/symbol/svg/${symbol}.svg";
+
+export const icon =
+  `${process.env.REACT_APP_ICON_URL}/symbol/svg/` + "${symbol}.svg";
