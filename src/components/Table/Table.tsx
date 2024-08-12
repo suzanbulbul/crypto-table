@@ -9,15 +9,6 @@ import { WhiteBox } from "../";
 // Type
 import { TableProps } from "./table.type";
 
-/**
- * The `Table` component displays tabular data with optional pagination and loading states.
- *
- * This component renders a table based on the provided `data` and `columns` props. It supports
- * pagination and can show a loading state with skeleton loaders. Columns can be customized to
- * display different types of data and can have different widths and visibility.
-
- */
-
 const WIDTHS_CN: { [key: string]: string } = {
   small: "w-1/4",
   medium: "w-1/3",
