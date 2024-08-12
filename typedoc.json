@@ -1,5 +1,5 @@
 {
-  "entryPoints": ["src/**/*"],
+  "entryPoints": ["src/typeDoc/**/*"],
   "out": "docs",
   "includeVersion": true,
   "exclude": ["**/*.test.tsx", "README.md"],
